@@ -1,71 +1,29 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const stages = document.querySelectorAll('.stage');
-    const music = document.getElementById('bg-music');
-    const progress = document.querySelector('.progress');
+// Inside your DOMContentLoaded function:
+
+// 1. Timer to show the button
+setTimeout(() => {
     const next1 = document.getElementById('next1');
-
-    // 1. Matrix Background Logic
-    const canvas = document.getElementById('matrix-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/[]{}";
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    function drawMatrix() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#0F0";
-        ctx.font = fontSize + "px monospace";
-        for (let i = 0; i < drops.length; i++) {
-            const text = characters[Math.floor(Math.random() * characters.length)];
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        }
+    if (next1) {
+        next1.style.display = 'block'; // Force visibility
+        next1.style.opacity = '1';
     }
-    setInterval(drawMatrix, 40);
+}, 4500); // 4.5 seconds for the loading bar to finish
 
-    // 2. Stage 1 Timer Logic
-    setTimeout(() => {
-        if(progress) progress.style.width = '100%';
-    }, 100);
-
-    // Button appears after 4 seconds
-    setTimeout(() => {
-        next1.classList.remove('hidden');
-    }, 4200);
-
-    // 3. Navigation Function
-    function goToStage(index) {
-        stages.forEach((s, i) => {
-            s.classList.toggle('active', i === index);
-        });
-        // Play music on first button click
-        if (index === 1) {
-            music.play().catch(() => console.log("Music blocked by browser"));
-        }
-    }
-
-    // 4. Reliable Tapping (Click + Touch)
-    const addSafeListener = (id, targetIndex) => {
-        const btn = document.getElementById(id);
-        if(!btn) return;
-
-        const action = (e) => {
-            e.preventDefault();
-            goToStage(targetIndex);
-        };
-
-        btn.addEventListener('click', action);
-        btn.addEventListener('touchstart', action, {passive: false});
-    };
-
-    addSafeListener('next1', 1);
-    addSafeListener('next2', 2);
-    addSafeListener('next3', 3);
+// 2. Navigation with a "Hard Link" for mobile
+const handleStart = (e) => {
+    if (e) e.preventDefault();
+    console.log("Button Tapped!"); // Check your browser console to see if this triggers
     
-    document.getElementById('restart').onclick = () => location.reload();
-});
+    // Play music
+    const music = document.getElementById('bg-music');
+    music.play().catch(() => console.log("Music blocked"));
+
+    // Switch Stage
+    document.getElementById('stage1').style.display = 'none';
+    document.getElementById('stage2').style.display = 'flex';
+    document.getElementById('stage2').classList.add('active');
+};
+
+const btn = document.getElementById('next1');
+btn.addEventListener('click', handleStart);
+btn.addEventListener('touchstart', handleStart, { passive: false });
