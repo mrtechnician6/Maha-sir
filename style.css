@@ -1,29 +1,31 @@
-/* Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Force the button to the very front */
+#next1 {
+    display: none; /* Initially hidden */
+    position: relative; 
+    z-index: 9999 !important; /* Forces it above the Matrix canvas */
+    cursor: pointer;
+    pointer-events: auto !important; /* Ensures the browser allows the touch */
+    background: #00ffff;
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-weight: bold;
+    box-shadow: 0 0 20px #00ffff;
+    margin-top: 20px;
 }
 
-body {
-    background-color: #000;
-    color: #fff;
-    font-family: 'Mukta', sans-serif;
-    overflow: hidden; /* Prevents scrolling between stages */
-}
-
-/* Background Matrix Effect - Layer 1 (Bottom) */
+/* Ensure the Matrix canvas stays at the very bottom */
 #matrix-canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
-    opacity: 0.4;
+    z-index: -1 !important; /* Moves it BEHIND everything */
 }
 
-/* Stages - Layer 2 (Middle) */
+/* Ensure the stage container doesn't block clicks */
 .stage {
     position: absolute;
     width: 100%;
@@ -31,84 +33,9 @@ body {
     display: none;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    z-index: 5;
+    z-index: 10;
 }
 
 .stage.active {
     display: flex;
-    animation: fadeIn 0.8s ease-in;
 }
-
-/* Content Box */
-.content-wrapper {
-    background: rgba(10, 10, 30, 0.95);
-    border: 2px solid #00ffff;
-    border-radius: 20px;
-    padding: 25px;
-    max-width: 450px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
-}
-
-/* Teacher Photos - Clear and Front */
-.teacher-photo {
-    width: 200px;
-    height: 200px;
-    border-radius: 15px; /* Rounded corners looks modern */
-    border: 3px solid #00ffff;
-    margin-bottom: 20px;
-    object-fit: cover;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 0 0 15px #00ffff;
-}
-
-/* Text Styles */
-h2 { color: #00ffff; margin-bottom: 10px; font-family: 'Orbitron'; }
-p { line-height: 1.7; font-size: 1.1rem; margin-bottom: 20px; color: #e0e0e0; }
-
-/* Interactive Elements - Layer 3 (Top) */
-.glow-button, .whatsapp-button {
-    position: relative;
-    z-index: 100; /* Stays on top of everything */
-    pointer-events: auto; /* Ensures it can be tapped */
-    cursor: pointer;
-    text-decoration: none;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.glow-button {
-    background: #00ffff;
-    color: #000;
-    border: none;
-    padding: 14px 28px;
-    border-radius: 30px;
-    box-shadow: 0 0 15px #00ffff;
-}
-
-.whatsapp-button {
-    display: block;
-    background: #25d366;
-    color: white;
-    padding: 14px;
-    border-radius: 30px;
-    margin-bottom: 15px;
-    box-shadow: 0 0 15px #25d366;
-}
-
-.glow-button:active, .whatsapp-button:active {
-    transform: scale(0.95);
-}
-
-/* Progress Bar (Stage 1) */
-.loading-bar { width: 100%; background: #222; height: 10px; border-radius: 5px; margin: 20px 0; }
-.progress { width: 0%; height: 100%; background: #00ffff; transition: width 4s linear; }
-.hidden { display: none !important; }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    
