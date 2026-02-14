@@ -1,29 +1,48 @@
-// Inside your DOMContentLoaded function:
-
-// 1. Timer to show the button
-setTimeout(() => {
-    const next1 = document.getElementById('next1');
-    if (next1) {
-        next1.style.display = 'block'; // Force visibility
-        next1.style.opacity = '1';
-    }
-}, 4500); // 4.5 seconds for the loading bar to finish
-
-// 2. Navigation with a "Hard Link" for mobile
-const handleStart = (e) => {
-    if (e) e.preventDefault();
-    console.log("Button Tapped!"); // Check your browser console to see if this triggers
-    
-    // Play music
+document.addEventListener('DOMContentLoaded', () => {
     const music = document.getElementById('bg-music');
-    music.play().catch(() => console.log("Music blocked"));
+    const stages = document.querySelectorAll('.stage');
 
-    // Switch Stage
-    document.getElementById('stage1').style.display = 'none';
-    document.getElementById('stage2').style.display = 'flex';
-    document.getElementById('stage2').classList.add('active');
-};
+    // 1. MATRIX EFFECT
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const chars = "0101ABCDEFGHIJKLMNOPQRSTUVWXYZ<>/?";
+    const drops = Array(Math.floor(canvas.width/16)).fill(1);
 
-const btn = document.getElementById('next1');
-btn.addEventListener('click', handleStart);
-btn.addEventListener('touchstart', handleStart, { passive: false });
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0ff"; 
+        ctx.font = "15px monospace";
+        drops.forEach((y, i) => {
+            const text = chars[Math.floor(Math.random()*chars.length)];
+            ctx.fillText(text, i*16, y*16);
+            if(y*16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        });
+    }
+    setInterval(drawMatrix, 50);
+
+    // 2. LOADING ANIMATION
+    setTimeout(() => { document.getElementById('progress-bar').style.width = '100%'; }, 100);
+    setTimeout(() => { document.getElementById('next1').classList.remove('hidden'); }, 4200);
+
+    // 3. NAVIGATION (FIXED FOR MOBILE)
+    function showStage(index) {
+        stages.forEach((s, i) => s.classList.toggle('active', i === index));
+        if(index === 1) music.play().catch(() => {});
+    }
+
+    const setBtn = (id, target) => {
+        const b = document.getElementById(id);
+        const action = (e) => { e.preventDefault(); showStage(target); };
+        b.addEventListener('click', action);
+        b.addEventListener('touchstart', action);
+    };
+
+    setBtn('next1', 1);
+    setBtn('next2', 2);
+    setBtn('next3', 3);
+    document.getElementById('restart').addEventListener('click', () => location.reload());
+});
