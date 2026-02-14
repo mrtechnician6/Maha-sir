@@ -1,264 +1,102 @@
-/* General Body Styles */
-body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    color: #eee;
-    overflow: hidden; /* Hide scrollbars, stages handle content */
-    background: #1a1a2e; /* Dark background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    perspective: 1000px; /* For 3D effects later if desired */
-}
+ * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Website Container */
-#website-container {
-    width: 100%;
-    height: 100vh;
-    position: relative;
-    box-shadow: 0 0 50px rgba(0, 255, 255, 0.5); /* Glowing effect for the whole container */
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Mukta', sans-serif;
     overflow: hidden;
 }
 
-/* Stage Styling */
+#website-container { width: 100vw; height: 100vh; position: relative; }
+
 .stage {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
+    width: 100%; height: 100%;
+    display: none;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: rgba(0, 0, 0, 0.8); /* Dark overlay */
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
-    text-align: center;
     padding: 20px;
-    box-sizing: border-box;
+    background: radial-gradient(circle, #0a0a20, #000);
 }
 
-.stage.active {
-    opacity: 1;
-    visibility: visible;
-}
+.stage.active { display: flex; animation: fadeIn 1s ease-in; }
 
-.stage-bg-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1; /* Behind content */
-    filter: brightness(0.4) grayscale(0.2); /* Dim and desaturate image */
-    transition: filter 1s ease-in-out;
-}
-
+/* Content Box */
 .content-wrapper {
-    position: relative;
-    z-index: 1;
-    max-width: 800px;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 255, 255, 0.3);
+    background: rgba(10, 10, 30, 0.9);
+    border: 2px solid #00ffff;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 95%;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+    z-index: 10;
 }
 
-h1, h2 {
-    font-family: 'Orbitron', sans-serif;
-    color: #00ffff; /* Cyan glow */
+/* Teacher Photo Styling - Front and Clear */
+.teacher-photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 4px solid #00ffff;
     margin-bottom: 20px;
-    text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff;
+    object-fit: cover;
+    box-shadow: 0 0 20px #00ffff;
 }
 
-h1 {
-    font-size: 3.5em;
-    letter-spacing: 5px;
-}
+h2 { color: #00ffff; margin-bottom: 15px; font-family: 'Orbitron'; }
+p { line-height: 1.6; font-size: 1.1rem; margin-bottom: 20px; }
 
-h2 {
-    font-size: 2.5em;
-    letter-spacing: 3px;
-}
-
-p {
-    font-size: 1.3em;
-    line-height: 1.6;
-    margin-bottom: 30px;
-    text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
-}
-
-/* Stage 1 Specifics */
-.glitch {
-    font-size: 4em;
+/* Buttons */
+.glow-button {
+    background: #00ffff;
+    color: #000;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
     font-weight: bold;
-    color: #fff;
-    position: relative;
-    animation: glitch-animation 1.5s infinite linear alternate;
-    text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; /* Pink and Cyan */
+    cursor: pointer;
+    box-shadow: 0 0 15px #00ffff;
+    transition: 0.3s;
+    font-family: 'Orbitron';
 }
-.glitch::before,
-.glitch::after {
-    content: attr(data-text);
+
+.glow-button:hover { transform: scale(1.1); background: #fff; }
+
+.whatsapp-button {
+    display: block;
+    background: #25d366;
+    color: white;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 30px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    box-shadow: 0 0 15px #25d366;
+}
+
+/* Stage 1 Matrix */
+#matrix-canvas {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0); /* Make sure background is transparent */
-}
-.glitch::before {
-    left: 2px;
-    text-shadow: -2px 0 #ff00ff;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim-1 2s infinite linear alternate-reverse;
-}
-.glitch::after {
-    left: -2px;
-    text-shadow: -2px 0 #00ffff;
-    clip: rect(85px, 450px, 100px, 0);
-    animation: glitch-anim-2 3s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-animation {
-    0% { transform: translate(0); }
-    20% { transform: translate(-2px, 2px); }
-    40% { transform: translate(-2px, -2px); }
-    60% { transform: translate(2px, 2px); }
-    80% { transform: translate(2px, -2px); }
-    100% { transform: translate(0); }
-}
-@keyframes glitch-anim-1 {
-    0% { clip: rect(10px, 9999px, 50px, 0); }
-    10% { clip: rect(40px, 9999px, 80px, 0); }
-    20% { clip: rect(60px, 9999px, 100px, 0); }
-    30% { clip: rect(20px, 9999px, 60px, 0); }
-    40% { clip: rect(70px, 9999px, 90px, 0); }
-    50% { clip: rect(0, 9999px, 40px, 0); }
-    60% { clip: rect(30px, 9999px, 70px, 0); }
-    70% { clip: rect(80px, 9999px, 100px, 0); }
-    80% { clip: rect(10px, 9999px, 50px, 0); }
-    90% { clip: rect(50px, 9999px, 90px, 0); }
-    100% { clip: rect(20px, 9999px, 60px, 0); }
-}
-@keyframes glitch-anim-2 {
-    0% { clip: rect(20px, 9999px, 60px, 0); }
-    15% { clip: rect(5px, 9999px, 45px, 0); }
-    30% { clip: rect(70px, 9999px, 95px, 0); }
-    45% { clip: rect(15px, 9999px, 55px, 0); }
-    60% { clip: rect(80px, 9999px, 100px, 0); }
-    75% { clip: rect(30px, 9999px, 70px, 0); }
-    90% { clip: rect(0, 9999px, 35px, 0); }
-    100% { clip: rect(60px, 9999px, 90px, 0); }
-}
-
-
-.subtitle {
-    font-size: 1.2em;
-    color: #aaa;
-    margin-top: -15px;
-    opacity: 0;
-    animation: fadeIn 2s forwards 1.5s;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0.3;
 }
 
 .loading-bar {
-    width: 60%;
-    height: 8px;
-    background-color: #333;
-    border-radius: 5px;
-    margin: 30px auto;
-    overflow: hidden;
-    box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.5);
+    width: 100%; height: 100%; background: #222;
+    height: 10px; border-radius: 5px; margin: 20px 0;
 }
 
 .progress {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(to right, #00ffff, #ff00ff); /* Cyan to Magenta */
-    border-radius: 5px;
-    animation: load-progress 4s forwards;
+    width: 0%; height: 100%;
+    background: #00ffff; border-radius: 5px;
+    transition: width 4s linear;
 }
 
-@keyframes load-progress {
-    0% { width: 0%; }
-    100% { width: 100%; }
-}
+.hidden { display: none; }
 
-@keyframes fadeIn {
-    to { opacity: 1; }
-}
-
-/* Glow Button Styling */
-.glow-button {
-    background-color: #00ffff; /* Cyan base */
-    color: #1a1a2e;
-    border: none;
-    padding: 15px 30px;
-    font-size: 1.2em;
-    font-family: 'Orbitron', sans-serif;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
-    transition: all 0.3s ease;
-    margin-top: 20px;
-}
-
-.glow-button:hover {
-    background-color: #ff00ff; /* Magenta on hover */
-    box-shadow: 0 0 25px #ff00ff, 0 0 50px #ff00ff;
-    transform: translateY(-3px);
-    color: #fff;
-}
-
-.glow-button:active {
-    transform: translateY(0);
-    box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
-}
-
-.hidden {
-    opacity: 0;
-    visibility: hidden;
-}
-
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2.5em;
-    }
-    h2 {
-        font-size: 1.8em;
-    }
-    p {
-        font-size: 1em;
-    }
-    .content-wrapper {
-        padding: 20px;
-        max-width: 95%;
-    }
-    .glow-button {
-        padding: 12px 25px;
-        font-size: 1em;
-    }
-}
-
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.8em;
-    }
-    h2 {
-        font-size: 1.4em;
-    }
-    p {
-        font-size: 0.9em;
-    }
-    .glow-button {
-        padding: 10px 20px;
-        font-size: 0.9em;
-    }
-      }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                              
